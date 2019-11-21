@@ -1,34 +1,112 @@
 package geco;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.Test;
 
-public class LoginServiceTest extends TestCase {
+import java.util.Arrays;
+import java.util.List;
 
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public LoginServiceTest( String testName )
-    {
-        super( testName );
-    }
+import static org.junit.Assert.*;
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( LoginServiceTest.class );
-    }
+public class LoginServiceTest  {
 
     /**
      * Rigourous Test :-)
      */
-    public void testApp()
+
+    private LoginService loginService;
+
+    @Test
+    public void loginExistsTestFalse()
     {
-        assertTrue( true );
+        //GIVEN
+        String[] logins = {"cyysi45", "lnl", "eleve3"};
+        loginService = new LoginService(logins);
+        //WHEN
+        boolean exist = loginService.loginExists("lnlyguyg");
+        //THEN
+        assertFalse( exist );
+    }
+
+    @Test
+    public void loginExistsTestTrue()
+    {
+        //GIVEN
+        String[] logins;
+        //WHEN
+        logins = new String[]{"cyysi45", "lnl"};
+        loginService = new LoginService(logins);
+        boolean exist = loginService.loginExists("lnl");
+        //THEN
+        assertTrue( exist );
+    }
+
+    @Test
+    public void addLogin() {
+        //GIVEN
+        String[] logins = {"cyysi45", "lnl"};
+        //WHEN
+        loginService = new LoginService(logins);
+        loginService.addLogin("fer45");
+        //THEN
+        assertTrue(loginService.loginExists("fer45"));
+    }
+
+    @Test
+    public void addLoginFalse() {
+        //GIVEN
+        String[] logins = {"cyysi45", "lnl"};
+        //WHEN
+        loginService = new LoginService(logins);
+        loginService.addLogin("fer45");
+        //THEN
+        assertFalse(loginService.loginExists("hy56"));
+    }
+
+    @Test
+    public void findAllLoginsStartingWith() {
+        //GIVEN
+        String[] logins = {"cyysi45", "lnl", "lucia"};
+        List<String> liste;
+        //WHEN
+        loginService = new LoginService(logins);
+        liste = loginService.findAllLoginsStartingWith("l");
+        //THEN
+        assertEquals("[lnl, lucia]",liste.toString());
+    }
+
+    @Test
+    public void findAllLoginsStartingWithFalse() {
+        //GIVEN
+        String[] logins = {"cyysi45", "lnl", "lucia"};
+        List<String> liste;
+        //WHEN
+        loginService = new LoginService(logins);
+        liste = loginService.findAllLoginsStartingWith("l");
+        //THEN
+        assertNotEquals("[cyysi45]",liste.toString());
+    }
+
+    @Test
+    public void findAllLogins() {
+        //GIVEN
+        String[] logins = {"cyysi45", "lnl", "lucia"};
+        List<String> liste;
+        //WHEN
+        loginService = new LoginService(logins);
+        liste = loginService.findAllLogins();
+        //THEN
+        assertEquals("[cyysi45, lnl, lucia]",liste.toString());
+    }
+
+    @Test
+    public void findAllLoginsFalse() {
+        //GIVEN
+        String[] logins = {"lucia"};
+        List<String> liste;
+        //WHEN
+        loginService = new LoginService(logins);
+        liste = loginService.findAllLogins();
+        //THEN
+        assertNotEquals("[cyysi45, lnl, lucia]",liste.toString());
     }
 }
